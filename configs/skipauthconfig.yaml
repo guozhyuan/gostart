@@ -1,0 +1,4 @@
+skipauth: 
+    - /api/login
+    - /api/register
+    

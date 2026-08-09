@@ -1,0 +1,32 @@
+tcp:
+  host: 0.0.0.0
+  port: 8848
+db:
+  host: localhost
+  port: 3306
+  user: root
+  password: jugg
+  name: guo2
+  charset: utf8mb4
+  collation: utf8mb4_unicode_ci
+  maxIdleConns: 10
+  maxOpenConns: 100
+  connMaxLifetime: 1800s
+jwt:
+  secret: "your_jwt_secret"
+  expire: 7200
+
+redis:
+  address: localhost:6379
+  password: "" # no password
+  db: 0 # use default DB
+  poolSize: 10
+  maxIdleConns: 5
+  maxOpenConns: 10
+  connMaxLifetime: 300s
+# Zap日志配置
+zap:
+  env: dev #开发环境 dev | prod
+  outputPaths:  "./logs/app.log"
+  errorOutputPaths: "./log/err.log"
+  

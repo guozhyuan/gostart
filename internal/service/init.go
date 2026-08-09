@@ -15,6 +15,10 @@ import (
 	"gorm.io/gorm"
 )
 
+func ReadConfig() {
+	config.ReadConfigByViper()
+}
+
 var DB *gorm.DB
 var RedisDB *redis.Client
 var Ctx context.Context = context.Background()

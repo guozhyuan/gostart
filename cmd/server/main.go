@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	config.ReadConfigByViper()
+	service.ReadConfig()
 	service.ConnectDB()
 	service.ConnectRedis()
 	service.ZapLogInit()

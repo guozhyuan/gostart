@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 	"fmt"
+	"gostart/internal/config"
 	"log"
-	"myserver/internal/config"
 	"os"
 
 	"github.com/redis/go-redis/v9"

@@ -1,8 +1,8 @@
 package router
 
 import (
-	"myserver/internal/handler"
-	"myserver/internal/middleware"
+	"gostart/internal/handler"
+	"gostart/internal/middleware"
 
 	"github.com/gin-gonic/gin"
 )

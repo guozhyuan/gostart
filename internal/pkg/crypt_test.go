@@ -2,7 +2,7 @@ package pkg_test
 
 import (
 	"fmt"
-	"myserver/internal/pkg"
+	"gostart/internal/pkg"
 	"testing"
 )
 

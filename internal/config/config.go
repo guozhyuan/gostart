@@ -16,6 +16,11 @@ type Config struct {
 	Redis *Redis     `yaml:"redis"`
 	JWT   *JWTConfig `yaml:"jwt"`
 	Zap   *ZapConfig `yaml:"zap"`
+	Gin   *GinConfig `yaml:"gin"`
+}
+
+type GinConfig struct {
+	Mode string `yaml:"mode"`
 }
 
 type Tcp struct {

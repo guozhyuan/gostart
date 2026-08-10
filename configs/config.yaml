@@ -29,4 +29,8 @@ zap:
   env: dev #开发环境 dev | prod
   outputPaths:  "./logs/app.log"
   errorOutputPaths: "./log/err.log"
+
+gin:
+  mode: debug # debug | release
+
   

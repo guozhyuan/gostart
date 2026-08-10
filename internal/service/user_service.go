@@ -2,8 +2,8 @@ package service
 
 import (
 	"errors"
-	"myserver/internal/model"
-	"myserver/internal/pkg"
+	"gostart/internal/model"
+	"gostart/internal/pkg"
 	"strconv"
 
 	"gorm.io/gorm"

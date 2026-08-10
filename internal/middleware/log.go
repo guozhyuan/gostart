@@ -2,9 +2,9 @@ package middleware
 
 import (
 	"fmt"
+	"gostart/internal/service"
 	"io"
 	"log/slog"
-	"myserver/internal/service"
 	"net/http"
 	"os"
 	"time"

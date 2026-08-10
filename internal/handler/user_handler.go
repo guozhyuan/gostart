@@ -2,9 +2,9 @@ package handler
 
 import (
 	"fmt"
-	"myserver/internal/model"
-	"myserver/internal/pkg/response"
-	"myserver/internal/service"
+	"gostart/internal/model"
+	"gostart/internal/pkg/response"
+	"gostart/internal/service"
 	"net/http"
 	"strconv"
 
@@ -19,7 +19,16 @@ func Fail(c *gin.Context, code int, message string) {
 	c.JSON(code, model.Assemble(code, message, nil))
 }
 
-// 登录
+// @Summary      登录
+// @Description  登录
+// @Tags         用户管理
+// @Accept       json
+// @Produce      json
+// @Param        username  formData string true "用户名"
+// @Param        password  formData string true "用户名"
+// @Success      200   {object}   response.LoginResp  "登录成功"
+// @Failure      400   {string}  string  "请求参数错误"
+// @Router       /api/login [post]
 func Login(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
@@ -43,7 +52,16 @@ func Logout(c *gin.Context) {
 
 }
 
-// 创建用户
+// @Summary      创建用户
+// @Description  创建用户
+// @Tags         用户管理
+// @Accept       json
+// @Produce      json
+// @Param        username  formData string true "用户名"
+// @Param        password  formData string true "用户密码"
+// @Success      200   {object}   response.LoginResp  "注册成功"
+// @Failure      400   {string}  string  "请求参数错误"
+// @Router       /api/regist [post]
 func Registe(c *gin.Context) {
 	var userParam model.UserDO
 	// if err := c.ShouldBindJSON(&userParam); err != nil {
@@ -69,7 +87,13 @@ func Registe(c *gin.Context) {
 	OK(c, loginResp)
 }
 
-// 获取用户列表
+// @Summary      获取用户列表
+// @Description  获取用户列表
+// @Tags         用户管理
+// @Produce      json
+// @Success      200   {object}   []model.UserDO
+// @Failure      400   {string}  string
+// @Router       /api/user [get]
 func GetUsers(c *gin.Context) {
 	ret, err := service.GetAllUsers()
 	if err != nil {
@@ -79,7 +103,15 @@ func GetUsers(c *gin.Context) {
 	OK(c, ret)
 }
 
-// 获取单个用户
+// @Summary      获取单个用户
+// @Description  获取单个用户
+// @Tags         用户管理
+// @Accept       json
+// @Produce      json
+// @Param        id path int  true "用户id"
+// @Success      200   {object}   []model.UserDO
+// @Failure      400   {string}  string
+// @Router       /api/user [get]
 func GetUser(c *gin.Context) {
 	intId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {

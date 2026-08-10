@@ -1,7 +1,7 @@
 package main
 
 import (
-	"myserver/internal/config"
+	"gostart/internal/config"
 	"os"
 	"os/signal"
 	"syscall"

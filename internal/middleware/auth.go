@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"myserver/internal/handler"
-	"myserver/internal/pkg"
+	"gostart/internal/handler"
+	"gostart/internal/pkg"
 	"net/http"
 	"slices"
 	"strings"

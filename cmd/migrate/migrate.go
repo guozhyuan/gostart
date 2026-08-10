@@ -1,9 +1,9 @@
 package main
 
 import (
-	"myserver/internal/config"
-	"myserver/internal/model"
-	"myserver/internal/service"
+	"gostart/internal/config"
+	"gostart/internal/model"
+	"gostart/internal/service"
 
 	"gorm.io/gorm"
 )

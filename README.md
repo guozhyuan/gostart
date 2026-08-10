@@ -50,6 +50,8 @@ go get github.com/swaggo/files <br>
 ### 日志管理   zap <br>
 ### 日志轮换 lumberjack <br>
 ### 文档管理 swag 
+
+参考:https://github.com/swaggo/swag/blob/master/README_zh-CN.md
 1.在main()添加以下注释, 
 ```
 // @title           Gin + Swagger 示例 API
@@ -78,5 +80,17 @@ go run cmd/server/main.go
 ```
 http://localhost:8848/swagger/index.html
 ```
-7.在handler中添加swagger注释
+
+#### 常见问题
+授权验证
+在main中添加
+```
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
+```
+在具体handler中添加
+```
+// @Security ApiKeyAuth
+```
 

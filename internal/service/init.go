@@ -47,69 +47,69 @@ var ZapSugar *zap.SugaredLogger
 
 func ZapLogInit() {
 	var core zapcore.Core
-	env := config.Configs.Zap.Env
-
-	// 控制台输出
-	consoleWriter := zapcore.AddSync(os.Stdout)
-	// 控制台等级
-	levelDebug := zap.NewAtomicLevelAt(zap.DebugLevel)
-	// 控制台编码器
-	consoleEncoder := zapcore.NewConsoleEncoder(zapcore.EncoderConfig{
-		TimeKey:        "time",
+	env := config.Configs.Env
+	// 文件编码器（JSON 结构化）
+	fileEncoder := zapcore.NewJSONEncoder(zapcore.EncoderConfig{
+		TimeKey:        "timestamp",
 		LevelKey:       "level",
 		NameKey:        "logger",
 		CallerKey:      "caller",
+		FunctionKey:    zapcore.OmitKey,
 		MessageKey:     "msg",
 		StacktraceKey:  "stack",
 		LineEnding:     zapcore.DefaultLineEnding,
-		EncodeLevel:    zapcore.CapitalColorLevelEncoder, // 彩色
-		EncodeTime:     zapcore.RFC3339TimeEncoder,
-		EncodeDuration: zapcore.StringDurationEncoder,
+		EncodeLevel:    zapcore.LowercaseLevelEncoder,
+		EncodeTime:     zapcore.ISO8601TimeEncoder,
+		EncodeDuration: zapcore.SecondsDurationEncoder,
 		EncodeCaller:   zapcore.ShortCallerEncoder,
 	})
-	consoleCore := zapcore.NewCore(consoleEncoder, consoleWriter, levelDebug)
-	if env == "prod" {
-		// 文件编码器（JSON 结构化）
-		fileEncoder := zapcore.NewJSONEncoder(zapcore.EncoderConfig{
-			TimeKey:        "timestamp",
+
+	// 文件输出
+	fileWriter := zapcore.AddSync(&lumberjack.Logger{
+		Filename:   config.Configs.Zap.OutputPaths,
+		MaxSize:    100, // MB
+		MaxBackups: 30,
+		MaxAge:     7,
+		Compress:   true,
+	})
+	// 文件输出（错误日志）
+	errWriter := zapcore.AddSync(&lumberjack.Logger{
+		Filename:   config.Configs.Zap.ErrorOutputPaths,
+		MaxSize:    100,
+		MaxBackups: 30,
+		MaxAge:     7,
+		Compress:   true,
+	})
+
+	levelInfo := zap.NewAtomicLevelAt(zap.InfoLevel)
+	levelError := zap.NewAtomicLevelAt(zap.ErrorLevel)
+
+	fileCore := zapcore.NewCore(fileEncoder, fileWriter, levelInfo)
+	fileErrCore := zapcore.NewCore(fileEncoder, errWriter, levelError)
+
+	if env == "dev" {
+		// 控制台输出
+		consoleWriter := zapcore.AddSync(os.Stdout)
+		// 控制台等级
+		levelDebug := zap.NewAtomicLevelAt(zap.DebugLevel)
+		// 控制台编码器
+		consoleEncoder := zapcore.NewConsoleEncoder(zapcore.EncoderConfig{
+			TimeKey:        "time",
 			LevelKey:       "level",
 			NameKey:        "logger",
 			CallerKey:      "caller",
-			FunctionKey:    zapcore.OmitKey,
 			MessageKey:     "msg",
 			StacktraceKey:  "stack",
 			LineEnding:     zapcore.DefaultLineEnding,
-			EncodeLevel:    zapcore.LowercaseLevelEncoder,
-			EncodeTime:     zapcore.ISO8601TimeEncoder,
-			EncodeDuration: zapcore.SecondsDurationEncoder,
+			EncodeLevel:    zapcore.CapitalColorLevelEncoder, // 彩色
+			EncodeTime:     zapcore.RFC3339TimeEncoder,
+			EncodeDuration: zapcore.StringDurationEncoder,
 			EncodeCaller:   zapcore.ShortCallerEncoder,
 		})
-
-		// 文件输出
-		fileWriter := zapcore.AddSync(&lumberjack.Logger{
-			Filename:   config.Configs.Zap.OutputPaths,
-			MaxSize:    100, // MB
-			MaxBackups: 30,
-			MaxAge:     7,
-			Compress:   true,
-		})
-		// 文件输出（错误日志）
-		errWriter := zapcore.AddSync(&lumberjack.Logger{
-			Filename:   config.Configs.Zap.ErrorOutputPaths,
-			MaxSize:    100,
-			MaxBackups: 30,
-			MaxAge:     7,
-			Compress:   true,
-		})
-
-		levelInfo := zap.NewAtomicLevelAt(zap.InfoLevel)
-		levelError := zap.NewAtomicLevelAt(zap.ErrorLevel)
-
-		fileCore := zapcore.NewCore(fileEncoder, fileWriter, levelInfo)
-		fileErrCore := zapcore.NewCore(fileEncoder, errWriter, levelError)
-		core = zapcore.NewTee(consoleCore, fileCore, fileErrCore)
-	} else {
+		consoleCore := zapcore.NewCore(consoleEncoder, consoleWriter, levelDebug)
 		core = zapcore.NewTee(consoleCore)
+	} else {
+		core = zapcore.NewTee(fileCore, fileErrCore)
 	}
 
 	logger := zap.New(

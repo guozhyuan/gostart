@@ -3,7 +3,6 @@ package handler
 import (
 	"fmt"
 	"gostart/internal/model"
-	"gostart/internal/pkg/response"
 	"gostart/internal/service"
 	"net/http"
 	"strconv"
@@ -22,12 +21,12 @@ func Fail(c *gin.Context, code int, message string) {
 // @Summary      登录
 // @Description  登录
 // @Tags         用户管理
-// @Accept       json
+// @Accept       x-www-form-urlencoded
 // @Produce      json
 // @Param        username  formData string true "用户名"
 // @Param        password  formData string true "用户名"
-// @Success      200   {object}   response.LoginResp  "登录成功"
-// @Failure      400   {string}  string  "请求参数错误"
+// @Success      200   {object}   model.LoginResp  "登录成功"
+// @Failure      400   {object}  model.Base  "请求参数错误"
 // @Router       /api/login [post]
 func Login(c *gin.Context) {
 	username := c.PostForm("username")
@@ -37,7 +36,7 @@ func Login(c *gin.Context) {
 		Fail(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	loginResp := &response.LoginResp{
+	loginResp := &model.LoginResp{
 		ID:           userDO.ID,
 		Username:     userDO.Username,
 		Email:        userDO.Email,
@@ -48,6 +47,14 @@ func Login(c *gin.Context) {
 	OK(c, loginResp)
 }
 
+// @Summary      登出
+// @Description  登出
+// @Tags         用户管理
+// @Accept       json
+// @Produce      json
+// @Success      200   {string}   string  "登出成功"
+// @Failure      400   {object}  model.Base  "请求参数错误"
+// @Router       /api/logout [post]
 func Logout(c *gin.Context) {
 
 }
@@ -59,8 +66,8 @@ func Logout(c *gin.Context) {
 // @Produce      json
 // @Param        username  formData string true "用户名"
 // @Param        password  formData string true "用户密码"
-// @Success      200   {object}   response.LoginResp  "注册成功"
-// @Failure      400   {string}  string  "请求参数错误"
+// @Success      200   {object}   model.LoginResp  "注册成功"
+// @Failure      400   {object}  model.Base  "请求参数错误"
 // @Router       /api/regist [post]
 func Registe(c *gin.Context) {
 	var userParam model.UserDO
@@ -76,7 +83,7 @@ func Registe(c *gin.Context) {
 		return
 	}
 
-	loginResp := &response.LoginResp{
+	loginResp := &model.LoginResp{
 		ID:           ret.ID,
 		Username:     ret.Username,
 		Email:        ret.Email,
@@ -90,17 +97,28 @@ func Registe(c *gin.Context) {
 // @Summary      获取用户列表
 // @Description  获取用户列表
 // @Tags         用户管理
+// @Accept       json
 // @Produce      json
-// @Success      200   {object}   []model.UserDO
-// @Failure      400   {string}  string
+// @Security ApiKeyAuth
+// @Success      200   {object}   []model.UserResp
+// @Failure      400   {object}  model.Base
 // @Router       /api/user [get]
 func GetUsers(c *gin.Context) {
 	ret, err := service.GetAllUsers()
+	var userResps = []*model.UserResp{}
+	for _, v := range ret {
+		userResps = append(userResps, &model.UserResp{
+			ID:       v.ID,
+			Username: v.Username,
+			Email:    v.Email,
+			Age:      v.Age,
+		})
+	}
 	if err != nil {
 		Fail(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	OK(c, ret)
+	OK(c, userResps)
 }
 
 // @Summary      获取单个用户
@@ -109,9 +127,10 @@ func GetUsers(c *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        id path int  true "用户id"
-// @Success      200   {object}   []model.UserDO
-// @Failure      400   {string}  string
-// @Router       /api/user [get]
+// @Security     ApiKeyAuth
+// @Success      200   {object}  model.UserResp
+// @Failure      400   {object}  model.Base
+// @Router       /api/user/{id} [get]
 func GetUser(c *gin.Context) {
 	intId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -122,11 +141,18 @@ func GetUser(c *gin.Context) {
 	fmt.Println("token中获取的userId : ", userId)
 
 	ret, err := service.GetUserById(intId)
+	var userResp = model.UserResp{
+		ID:       ret.ID,
+		Username: ret.Username,
+		Email:    ret.Email,
+		Age:      ret.Age,
+	}
+
 	if err != nil {
 		Fail(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	OK(c, ret)
+	OK(c, userResp)
 }
 
 // 更新用户

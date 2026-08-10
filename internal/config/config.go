@@ -11,19 +11,23 @@ import (
 )
 
 type Config struct {
-	Tcp   *Tcp       `yaml:"tcp"`
-	DB    *DB        `yaml:"db"`
-	Redis *Redis     `yaml:"redis"`
-	JWT   *JWTConfig `yaml:"jwt"`
-	Zap   *ZapConfig `yaml:"zap"`
-	Gin   *GinConfig `yaml:"gin"`
+	Env           string         `yaml:"env"`
+	Server        *Server        `yaml:"server"`
+	DB            *DB            `yaml:"db"`
+	Redis         *Redis         `yaml:"redis"`
+	JWT           *JWTConfig     `yaml:"jwt"`
+	Zap           *ZapConfig     `yaml:"zap"`
+	Swagger       *SwaggerConfig `yaml:"swagger"`
+	AuthSkipPaths []string       `yaml:"authSkipPaths"`
 }
 
-type GinConfig struct {
-	Mode string `yaml:"mode"`
+type SwaggerConfig struct {
+	Enabled bool     `yaml:"enabled"`
+	Host    string   `yaml:"host"`
+	Scheme  []string `yaml:"scheme"`
 }
 
-type Tcp struct {
+type Server struct {
 	Host string `yaml:"host"`
 	Port string `yaml:"port"`
 }
@@ -52,7 +56,6 @@ type JWTConfig struct {
 }
 
 type ZapConfig struct {
-	Env              string `yaml:"env" json:"env"`
 	OutputPaths      string `yaml:"outputPaths" json:"outputPaths"`
 	ErrorOutputPaths string `yaml:"errorOutputPaths" json:"errorOutputPaths"`
 }

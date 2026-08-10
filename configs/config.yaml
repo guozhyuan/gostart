@@ -1,4 +1,5 @@
-tcp:
+env: dev #开发环境 dev | prod
+server:
   host: 0.0.0.0
   port: 8848
 db:
@@ -26,11 +27,16 @@ redis:
   connMaxLifetime: 300s
 # Zap日志配置
 zap:
-  env: dev #开发环境 dev | prod
-  outputPaths:  "./logs/app.log"
+  outputPaths: "./logs/app.log"
   errorOutputPaths: "./log/err.log"
 
-gin:
-  mode: debug # debug | release
-
-  
+swagger:
+  enabled: true
+  host: localhost:8848 # localhost:8848 # 172.31.98.14
+  scheme:
+    - http
+    #- https
+# 跳过授权验证白名单
+authSkipPaths:
+  - /api/login
+  - /api/register

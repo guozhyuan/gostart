@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"time"
 
-	_ "gostart/docs"
+	docs "gostart/docs"
 
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
@@ -18,15 +18,19 @@ import (
 // @title           Gin + Swagger 示例 API
 // @version         1.0
 // @description     这是一个用 Gin 框架集成的 Swagger 示例
-// @host            localhost:8848
+// @host            localhost:8080
+// @scheme          https
 // @BasePath        /
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 	service.ReadConfig()
 	service.ConnectDB()
 	service.ConnectRedis()
 	service.ZapLogInit()
 
-	if config.Configs.Gin.Mode == "release" {
+	if config.Configs.Env == "prod" {
 		gin.SetMode("release")
 	}
 	engine := gin.New()
@@ -35,9 +39,9 @@ func main() {
 	engine.Use(middleware.ZapLoggerMiddleware())
 	engine.Use(middleware.CorsMiddleware())
 	router.RouteConfig(engine)
-	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	setupSwag(engine)
 	s := &http.Server{
-		Addr:           config.Configs.Tcp.Host + ":" + config.Configs.Tcp.Port,
+		Addr:           config.Configs.Server.Host + ":" + config.Configs.Server.Port,
 		Handler:        engine,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
@@ -45,4 +49,12 @@ func main() {
 	}
 	s.ListenAndServe()
 
+}
+
+func setupSwag(engine *gin.Engine) {
+	if config.Configs.Swagger.Enabled {
+		docs.SwaggerInfo.Host = config.Configs.Swagger.Host
+		docs.SwaggerInfo.Schemes = config.Configs.Swagger.Scheme
+		engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	}
 }

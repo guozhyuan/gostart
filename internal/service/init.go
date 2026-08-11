@@ -6,6 +6,7 @@ import (
 	"gostart/internal/config"
 	"log"
 	"os"
+	"time"
 
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
@@ -25,19 +26,30 @@ var Ctx context.Context = context.Background()
 
 func ConnectDB() {
 	// username:password@protocol(address)/dbname?param=value
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", config.Configs.DB.User, config.Configs.DB.Password, config.Configs.DB.Host, config.Configs.DB.Port, config.Configs.DB.Name)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=True&loc=Local",
+		config.Configs.Mysql.User,
+		config.Configs.Mysql.Password,
+		config.Configs.Mysql.Host,
+		config.Configs.Mysql.Port,
+		config.Configs.Mysql.Name,
+		config.Configs.Mysql.Charset,
+	)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	DB = db
 	if err != nil {
 		log.Fatal(err)
 	}
+	sqlDB, _ := db.DB()
+	sqlDB.SetMaxIdleConns(config.Configs.Mysql.MaxIdleConns)
+	sqlDB.SetMaxOpenConns(config.Configs.Mysql.MaxOpenConns)
+	sqlDB.SetConnMaxLifetime(time.Duration(config.Configs.Mysql.ConnMaxLifetime) * time.Second)
 }
 
 func ConnectRedis() {
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     config.Configs.Redis.Addr,
-		Password: "", // no password
-		DB:       0,  // use default DB
+		Password: config.Configs.Redis.Password, // no password
+		DB:       config.Configs.Redis.DB,       // use default DB
 	})
 	RedisDB = rdb
 }
@@ -107,16 +119,16 @@ func ZapLogInit() {
 			EncodeCaller:   zapcore.ShortCallerEncoder,
 		})
 		consoleCore := zapcore.NewCore(consoleEncoder, consoleWriter, levelDebug)
-		core = zapcore.NewTee(consoleCore)
+		core = zapcore.NewTee(consoleCore, fileCore, fileErrCore)
 	} else {
 		core = zapcore.NewTee(fileCore, fileErrCore)
 	}
 
 	logger := zap.New(
 		core,
-		//zap.AddCaller(),
+		zap.AddCaller(),
 		zap.AddStacktrace(zapcore.ErrorLevel),
-		//zap.AddCallerSkip(1),
+		zap.AddCallerSkip(1),
 	)
 	ZapLogger = logger
 	ZapSugar = logger.Sugar()

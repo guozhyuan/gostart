@@ -35,20 +35,19 @@ func main() {
 	}
 	engine := gin.New()
 	engine.Use(gin.Recovery())
-	// engine.Use(gin.Logger())
 	engine.Use(middleware.ZapLoggerMiddleware())
 	engine.Use(middleware.CorsMiddleware())
+	engine.SetTrustedProxies(config.Configs.Gin.TrustProxy)
 	router.RouteConfig(engine)
 	setupSwag(engine)
 	s := &http.Server{
-		Addr:           config.Configs.Server.Host + ":" + config.Configs.Server.Port,
+		Addr:           config.Configs.Gin.Host,
 		Handler:        engine,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
 	s.ListenAndServe()
-
 }
 
 func setupSwag(engine *gin.Engine) {
@@ -57,4 +56,10 @@ func setupSwag(engine *gin.Engine) {
 		docs.SwaggerInfo.Schemes = config.Configs.Swagger.Scheme
 		engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	}
+}
+
+func Release() {
+	// service.ReleaseDB()
+	// service.ReleaseRedis()
+
 }

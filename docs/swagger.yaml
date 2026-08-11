@@ -21,6 +21,8 @@ definitions:
         type: integer
       refreshToken:
         type: string
+      tmpTime:
+        type: string
       username:
         type: string
     type: object

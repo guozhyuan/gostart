@@ -12,8 +12,8 @@ import (
 
 type Config struct {
 	Env           string         `yaml:"env"`
-	Server        *Server        `yaml:"server"`
-	DB            *DB            `yaml:"db"`
+	Gin           *GinConfig     `yaml:"gin"`
+	Mysql         *DB            `yaml:"mysql"`
 	Redis         *Redis         `yaml:"redis"`
 	JWT           *JWTConfig     `yaml:"jwt"`
 	Zap           *ZapConfig     `yaml:"zap"`
@@ -26,7 +26,10 @@ type SwaggerConfig struct {
 	Host    string   `yaml:"host"`
 	Scheme  []string `yaml:"scheme"`
 }
-
+type GinConfig struct {
+	TrustProxy []string `yaml:"trustProxy"`
+	Host       string   `yaml:"host"`
+}
 type Server struct {
 	Host string `yaml:"host"`
 	Port string `yaml:"port"`
@@ -41,7 +44,7 @@ type DB struct {
 	Collation       string `yaml:"collation"`
 	MaxIdleConns    int    `yaml:"maxIdleConns"`
 	MaxOpenConns    int    `yaml:"maxOpenConns"`
-	ConnMaxLifetime string `yaml:"connMaxLifetime"`
+	ConnMaxLifetime int    `yaml:"connMaxLifetime"`
 }
 
 type Redis struct {

@@ -7,8 +7,10 @@ type Base struct {
 	Data    any    `json:"data"`
 }
 
-func Assemble(code int, message string, data any) *Base {
-	return &Base{
+// 小对象传值,大对象传指针
+// 90% 的场景小对象
+func Assemble(code int, message string, data any) Base {
+	return Base{
 		Code:    code,
 		Message: message,
 		Data:    data,

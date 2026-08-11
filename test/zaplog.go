@@ -1,4 +1,4 @@
-package main
+package test
 
 import (
 	"os"
@@ -10,7 +10,7 @@ import (
 
 var Zap *zap.Logger
 
-func ZapLogInit() {
+func TestZapLogInit() {
 	// 控制台编码器
 	consoleEncoder := zapcore.NewConsoleEncoder(zapcore.EncoderConfig{
 		TimeKey:        "time",

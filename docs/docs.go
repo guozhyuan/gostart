@@ -248,6 +248,9 @@ const docTemplate = `{
                 "refreshToken": {
                     "type": "string"
                 },
+                "tmpTime": {
+                    "type": "string"
+                },
                 "username": {
                     "type": "string"
                 }

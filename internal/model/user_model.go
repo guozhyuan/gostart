@@ -17,6 +17,6 @@ func (UserDO) TableName() string {
 }
 
 type TokenDO struct {
-	AccessToken  string `gorm:"primarykey" json:"accessToken"`
-	RefreshToken string `gorm:"primarykey" json:"refreshToken"`
+	AccessToken  string `json:"accessToken"`
+	RefreshToken string `json:"refreshToken"`
 }

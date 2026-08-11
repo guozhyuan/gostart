@@ -1,8 +1,10 @@
 env: dev #开发环境 dev | prod
-server:
-  host: 0.0.0.0
-  port: 8848
-db:
+gin:
+  trustProxy:
+    - 172.31.98.14
+  host: 0.0.0.0:9090
+ 
+mysql:
   host: localhost
   port: 3306
   user: root
@@ -10,9 +12,9 @@ db:
   name: guo2
   charset: utf8mb4
   collation: utf8mb4_unicode_ci
-  maxIdleConns: 10
-  maxOpenConns: 100
-  connMaxLifetime: 1800s
+  maxIdleConns: 25
+  maxOpenConns: 25
+  connMaxLifetime: 300   #seconds
 jwt:
   secret: "your_jwt_secret"
   expire: 7200
@@ -32,10 +34,10 @@ zap:
 
 swagger:
   enabled: true
-  host: localhost:8848 # localhost:8848 # 172.31.98.14
+  host: 172.31.98.14 # localhost # 172.31.98.14
   scheme:
-    - http
-    #- https
+    - https
+    # - http
 # 跳过授权验证白名单
 authSkipPaths:
   - /api/login

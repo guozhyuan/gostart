@@ -51,46 +51,4 @@ go get github.com/swaggo/files <br>
 ### 日志轮换 lumberjack <br>
 ### 文档管理 swag 
 
-参考:https://github.com/swaggo/swag/blob/master/README_zh-CN.md
-1.在main()添加以下注释, 
-```
-// @title           Gin + Swagger 示例 API
-// @version         1.0
-// @description     这是一个用 Gin 框架集成的 Swagger 示例
-// @host            localhost:8848
-// @BasePath        /
-```
-2.添加swagger路由
-```
-engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
-```
-3.生成文档
-```
-swag init -g ./cmd/server/main.go   <!-- 默认当前目录,用 -o 指定目录 -->
-```
-4.main.go导入生成的docs
-```
-import _ "gostart/docs" 
-```
-5.运行项目
-```
-go run cmd/server/main.go
-```
-6.访问文档
-```
-http://localhost:8848/swagger/index.html
-```
-
-#### 常见问题
-授权验证
-在main中添加
-```
-// @securityDefinitions.apikey ApiKeyAuth
-// @in header
-// @name Authorization
-```
-在具体handler中添加
-```
-// @Security ApiKeyAuth
-```
 

@@ -10,14 +10,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func OK(c *gin.Context, data any) {
-	c.JSON(http.StatusOK, model.Assemble(http.StatusOK, "success", data))
-}
-
-func Fail(c *gin.Context, code int, message string) {
-	c.JSON(code, model.Assemble(code, message, nil))
-}
-
 // @Summary      登录
 // @Description  登录
 // @Tags         用户管理

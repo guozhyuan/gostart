@@ -19,4 +19,9 @@ func RouteConfig(engine *gin.Engine) {
 		api.PUT("/user/:id", handler.UpdateUser)
 		api.DELETE("/user/:id", handler.DeleteUser)
 	}
+	admin := engine.Group("/admin")
+	admin.Use(middleware.RateLimitMiddleware(5))
+	{
+		admin.POST("/login", handler.AdminLogin)
+	}
 }

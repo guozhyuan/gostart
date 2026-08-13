@@ -48,7 +48,7 @@ type DB struct {
 }
 
 type Redis struct {
-	Addr     string `yaml:"addr"`
+	Address  string `yaml:"address"`
 	Password string `yaml:"password"`
 	DB       int    `yaml:"db"`
 }

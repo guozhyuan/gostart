@@ -20,17 +20,13 @@ jwt:
   expire: 7200
 
 redis:
-  address: localhost:6379
-  password: "" # no password
+  address: 172.31.98.14:6379
+  password: "guo" # no password ""
   db: 0 # use default DB
-  poolSize: 10
-  maxIdleConns: 5
-  maxOpenConns: 10
-  connMaxLifetime: 300s
 # Zap日志配置
 zap:
   outputPaths: "./logs/app.log"
-  errorOutputPaths: "./log/err.log"
+  errorOutputPaths: "./logs/err.log"
 
 swagger:
   enabled: true

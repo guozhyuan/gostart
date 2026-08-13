@@ -47,7 +47,7 @@ func ConnectDB() {
 
 func ConnectRedis() {
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     config.Configs.Redis.Addr,
+		Addr:     config.Configs.Redis.Address,
 		Password: config.Configs.Redis.Password, // no password
 		DB:       config.Configs.Redis.DB,       // use default DB
 	})
@@ -128,7 +128,7 @@ func ZapLogInit() {
 		core,
 		zap.AddCaller(),
 		zap.AddStacktrace(zapcore.ErrorLevel),
-		zap.AddCallerSkip(1),
+		// zap.AddCallerSkip(1),
 	)
 	ZapLogger = logger
 	ZapSugar = logger.Sugar()

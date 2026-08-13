@@ -65,3 +65,15 @@ func JsonTest3() {
 	fmt.Println("map is nil? ", user3.Map == nil)
 
 }
+
+func JsonTest4() {
+	var user User
+
+	fmt.Println("user.Name  ", user.Name)
+	fmt.Println("user.ID  ", user.ID)
+	fmt.Println("user.Map  ", user.Map)
+	fmt.Println("user.Map is nil? ", user.Map == nil)
+	fmt.Println("user.Map  ", user.Map["key1"])
+	user.Map["key1"] = "value1"
+
+}

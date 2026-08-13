@@ -47,12 +47,11 @@ func CreateUser(userParam *model.UserDO) (*model.UserDO, *model.TokenDO, error) 
 	if userParam.Username == "" || userParam.Password == "" {
 		return nil, nil, errors.New("用户名或密码不能为空")
 	}
-
-	result, err := GetUserByName(userParam.Username)
-	if err != nil {
-		return nil, nil, err
+	var result model.UserDO
+	tx := DB.Where("username = ?", userParam.Username).First(&result)
+	if tx.Error != nil && !errors.Is(tx.Error, gorm.ErrRecordNotFound) {
+		return nil, nil, tx.Error
 	}
-
 	if result.Username != "" {
 		return nil, nil, errors.New("用户名已存在")
 	}
@@ -80,9 +79,14 @@ func CreateUser(userParam *model.UserDO) (*model.UserDO, *model.TokenDO, error) 
 
 func GetUserById(id int) (*model.UserDO, error) {
 	var user model.UserDO
-	if err := DB.First(&user, id).Error; err != nil {
+	err := DB.First(&user, id).Error
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
 	}
+	if user.ID == 0 {
+		return nil, errors.New("用户名不存在")
+	}
+	ZapLogger.Error("TEST Zaplogger ERROR 日志")
 	return &user, nil
 }
 
@@ -92,6 +96,8 @@ func GetUserByName(username string) (*model.UserDO, error) {
 
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
+	} else if err != nil {
+		return nil, errors.New("用户名不存在")
 	}
 
 	return &user, nil

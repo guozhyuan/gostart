@@ -126,23 +126,21 @@ func GetUsers(c *gin.Context) {
 func GetUser(c *gin.Context) {
 	intId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		Fail(c, http.StatusBadRequest, "id can not be empty")
+		Fail(c, http.StatusBadRequest, err.Error())
 	}
 
 	userId, _ := c.Get("userId")
 	fmt.Println("token中获取的userId : ", userId)
-
 	ret, err := service.GetUserById(intId)
-	var userResp = model.UserResp{
+	if err != nil {
+		Fail(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	userResp := model.UserResp{
 		ID:       ret.ID,
 		Username: ret.Username,
 		Email:    ret.Email,
 		Age:      ret.Age,
-	}
-
-	if err != nil {
-		Fail(c, http.StatusBadRequest, err.Error())
-		return
 	}
 	OK(c, userResp)
 }

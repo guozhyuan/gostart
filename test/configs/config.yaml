@@ -1,0 +1,40 @@
+env: dev #开发环境 dev | prod
+gin:
+  trustProxy:
+    - 172.31.98.14
+  host: 0.0.0.0:9090
+ 
+mysql:
+  host: localhost
+  port: 3306
+  user: root
+  password: jugg
+  name: guo2
+  charset: utf8mb4
+  collation: utf8mb4_unicode_ci
+  maxIdleConns: 25
+  maxOpenConns: 25
+  connMaxLifetime: 300   #seconds
+jwt:
+  secret: "your_jwt_secret"
+  expire: 7200
+
+redis:
+  address: 172.31.98.14:6379
+  password: "guo" # no password用""
+  db: 0 # use default DB
+# Zap日志配置
+zap:
+  outputPaths: "./logs/app.log"
+  errorOutputPaths: "./log/err.log"
+
+swagger:
+  enabled: true
+  host: 172.31.98.14 # localhost # 172.31.98.14
+  scheme:
+    - https
+    # - http
+# 跳过授权验证白名单
+authSkipPaths:
+  - /api/login
+  - /api/register

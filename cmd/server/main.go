@@ -2,7 +2,6 @@ package main
 
 import (
 	"gostart/internal/config"
-	"gostart/internal/middleware"
 	"gostart/internal/router"
 	"gostart/internal/service"
 	"net/http"
@@ -34,9 +33,6 @@ func main() {
 		gin.SetMode("release")
 	}
 	engine := gin.New()
-	engine.Use(gin.Recovery())
-	engine.Use(middleware.ZapLoggerMiddleware())
-	engine.Use(middleware.CorsMiddleware())
 	engine.SetTrustedProxies(config.Configs.Gin.TrustProxy)
 	router.RouteConfig(engine)
 	setupSwag(engine)

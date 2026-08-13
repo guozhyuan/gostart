@@ -16,6 +16,51 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/admin/login": {
+            "post": {
+                "description": "管理员登录",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员"
+                ],
+                "summary": "管理员登录",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户名",
+                        "name": "username",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户名",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "登录成功",
+                        "schema": {
+                            "$ref": "#/definitions/model.LoginResp"
+                        }
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/model.Base"
+                        }
+                    }
+                }
+            }
+        },
         "/api/login": {
             "post": {
                 "description": "登录",
@@ -218,7 +263,6 @@ const docTemplate = `{
     },
     "definitions": {
         "model.Base": {
-            "description": "统一的 API 响应格式 ,响应成功的结果放在Data字段中;响应失败的结果放在Message字段中",
             "type": "object",
             "properties": {
                 "code": {
@@ -246,9 +290,6 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "refreshToken": {
-                    "type": "string"
-                },
-                "tmpTime": {
                     "type": "string"
                 },
                 "username": {

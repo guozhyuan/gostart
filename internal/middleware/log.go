@@ -41,20 +41,39 @@ func ZapLoggerMiddleware() gin.HandlerFunc {
 		clientIP := c.ClientIP()
 
 		var msg string
+
 		if status >= 500 {
 			msg = "服务器错误"
+			service.ZapLogger.Error(msg,
+				zap.String("proto", proto),
+				zap.String("method", method),
+				zap.Int("status", status),
+				zap.String("path", path),
+				zap.String("ip", clientIP),
+				zap.Duration("latency", latency),
+			)
+		} else if status >= 400 {
+			msg = "请求失败"
+			service.ZapLogger.Warn(msg,
+				zap.String("proto", proto),
+				zap.String("method", method),
+				zap.Int("status", status),
+				zap.String("path", path),
+				zap.String("ip", clientIP),
+				zap.Duration("latency", latency),
+			)
 		} else {
-			msg = "请求处理完成"
-
+			msg = "请求成功"
+			service.ZapLogger.Info(msg,
+				zap.String("proto", proto),
+				zap.String("method", method),
+				zap.Int("status", status),
+				zap.String("path", path),
+				zap.String("ip", clientIP),
+				zap.Duration("latency", latency),
+			)
 		}
-		service.ZapLogger.Info(msg,
-			zap.String("proto", proto),
-			zap.String("method", method),
-			zap.Int("status", status),
-			zap.String("path", path),
-			zap.String("ip", clientIP),
-			zap.Duration("latency", latency),
-		)
+
 	}
 }
 

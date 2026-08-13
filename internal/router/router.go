@@ -8,8 +8,12 @@ import (
 )
 
 func RouteConfig(engine *gin.Engine) {
+	engine.Use(gin.Recovery())
+	engine.Use(middleware.CorsMiddleware())
+
 	api := engine.Group("/api")
 	api.Use(middleware.AuthMiddleware())
+	api.Use(middleware.ZapLoggerMiddleware())
 	{
 		api.POST("/login", handler.Login)
 		api.POST("/logout", handler.Logout)
@@ -19,7 +23,9 @@ func RouteConfig(engine *gin.Engine) {
 		api.PUT("/user/:id", handler.UpdateUser)
 		api.DELETE("/user/:id", handler.DeleteUser)
 	}
+
 	admin := engine.Group("/admin")
+	admin.Use(middleware.ZapLoggerMiddleware())
 	admin.Use(middleware.RateLimitMiddleware(5))
 	{
 		admin.POST("/login", handler.AdminLogin)

@@ -12,3 +12,6 @@ func TestJsonTest(t *testing.T) {
 func TestJsonTest3(t *testing.T) {
 	test.JsonTest3()
 }
+func TestJsonTest4(t *testing.T) {
+	test.JsonTest4()
+}

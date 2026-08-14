@@ -2,10 +2,7 @@ package main
 
 import (
 	"gostart/internal/config"
-	"gostart/internal/model"
 	"gostart/internal/service"
-
-	"gorm.io/gorm"
 )
 
 // 常见的gorm标签
@@ -38,13 +35,14 @@ import (
 // gorm:"type:text"	TEXT	通过 type 标签指定，用于长文本内容。
 // gorm:"type:json"	JSON	通过 type 标签指定，MySQL 5.7+ 支持
 func main() {
-	DB.AutoMigrate(&model.UserDO{})
-}
-
-var DB *gorm.DB
-
-func init() {
 	config.ReadConfigByViper()
 	service.ConnectDB()
-	DB = service.DB
+	migrate()
+}
+
+// 根据model生成表
+func migrate() {
+	// 生成表
+	// DB.AutoMigrate(&model.UserDO{})
+	// service.DB.AutoMigrate(&Platform{})
 }

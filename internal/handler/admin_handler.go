@@ -2,6 +2,10 @@ package handler
 
 import "github.com/gin-gonic/gin"
 
+type AdminHandlerInterface interface {
+	AdminLogin(c *gin.Context)
+}
+
 // @Summary      管理员登录
 // @Description  管理员登录
 // @Tags         管理员

@@ -2,7 +2,7 @@ package test_test
 
 import (
 	"context"
-	"gostart/internal/service"
+	"gostart/internal/pkg"
 	"testing"
 	"time"
 )
@@ -10,12 +10,12 @@ import (
 //String , Hash , Set, List
 
 func TestConnectRedis(t *testing.T) {
-	defer service.RedisDB.Close()
-	service.ReadConfig()
-	service.ConnectRedis()
+	defer pkg.RedisDB.Close()
+	pkg.ReadConfig()
+	pkg.ConnectRedis()
 	ctx := context.Background()
 
-	cmd := service.RedisDB.Ping(ctx)
+	cmd := pkg.RedisDB.Ping(ctx)
 	if _, err := cmd.Result(); err != nil {
 		t.Fatalf("Redis ping 失败: %v", err)
 	}
@@ -26,7 +26,7 @@ func TestConnectRedis(t *testing.T) {
 }
 
 func Set(c context.Context, key string, value string, expiration time.Duration) {
-	service.RedisDB.Set(c, key, value, expiration)
+	pkg.RedisDB.Set(c, key, value, expiration)
 }
 
 func HSet(c context.Context) {
@@ -34,7 +34,7 @@ func HSet(c context.Context) {
 		"key1": "value1",
 		"key2": "value2",
 	}
-	service.RedisDB.HSet(c, "HSet", m)
+	pkg.RedisDB.HSet(c, "HSet", m)
 }
 
 func LPush(c context.Context) {
@@ -42,7 +42,7 @@ func LPush(c context.Context) {
 		"key1": "value1",
 		"key2": "value2",
 	}
-	service.RedisDB.LPush(c, "LPush", m)
-	service.RedisDB.LPush(c, "LPush", m)
-	service.RedisDB.LPush(c, "LPush", m)
+	pkg.RedisDB.LPush(c, "LPush", m)
+	pkg.RedisDB.LPush(c, "LPush", m)
+	pkg.RedisDB.LPush(c, "LPush", m)
 }

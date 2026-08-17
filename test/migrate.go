@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"gostart/internal/config"
-	"gostart/internal/service"
+	"gostart/internal/pkg"
 	"io"
 	"net/http"
 )
@@ -29,13 +29,13 @@ type Result struct {
 
 func insertPlatform() {
 	config.ReadConfigByViper()
-	service.ConnectDB()
+	pkg.ConnectDB()
 	// 生成表
 	// DB.AutoMigrate(&model.UserDO{})
 	// service.DB.AutoMigrate(&Platform{})
 
-	service.ReadConfig()
-	service.ConnectDB()
+	pkg.ReadConfig()
+	pkg.ConnectDB()
 	var ret Result
 	// var platforms []Platform = make([]Platform, 100)
 	resp, err := http.Get("https://live.suancaihu.eu.org/api/platforms")
@@ -47,7 +47,7 @@ func insertPlatform() {
 	json.Unmarshal(bytes, &ret)
 	fmt.Println(ret)
 	fmt.Println("-----------------------------------------------")
-	err2 := service.DB.Create(ret.Data).Error
+	err2 := pkg.DB.Create(ret.Data).Error
 	if err2 != nil {
 		fmt.Println(err2.Error())
 	}
@@ -83,7 +83,7 @@ func (DataEntity) TableName() string {
 
 func insertPlatformStreamer() {
 	config.ReadConfigByViper()
-	service.ConnectDB()
+	pkg.ConnectDB()
 
 	var ret RootEntity = RootEntity{}
 	resp, err := http.Get("https://live.suancaihu.eu.org/api/streamers/mihu?page=10&pageSize=20")
@@ -96,7 +96,7 @@ func insertPlatformStreamer() {
 	json.Unmarshal(bytes, &ret)
 
 	var platforms []Platform = make([]Platform, 0, 20)
-	if err := service.DB.Find(&platforms).Error; err != nil {
+	if err := pkg.DB.Find(&platforms).Error; err != nil {
 		fmt.Println(err.Error())
 	}
 
@@ -108,7 +108,7 @@ func insertPlatformStreamer() {
 		}
 	}
 
-	dbError := service.DB.Create(&ret.Data).Error
+	dbError := pkg.DB.Create(&ret.Data).Error
 	if dbError != nil {
 		fmt.Println(dbError)
 	}

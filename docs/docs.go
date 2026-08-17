@@ -17,45 +17,29 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/admin/login": {
-            "post": {
+            "get": {
                 "description": "管理员登录",
                 "consumes": [
-                    "application/x-www-form-urlencoded"
+                    "application/json"
                 ],
                 "produces": [
-                    "application/json"
+                    "text/plain"
                 ],
                 "tags": [
                     "管理员"
                 ],
                 "summary": "管理员登录",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "用户名",
-                        "name": "username",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "用户名",
-                        "name": "password",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "登录成功",
                         "schema": {
-                            "$ref": "#/definitions/model.LoginResp"
+                            "$ref": "#/definitions/common.LoginResp"
                         }
                     },
                     "400": {
                         "description": "请求参数错误",
                         "schema": {
-                            "$ref": "#/definitions/model.Base"
+                            "$ref": "#/definitions/common.Base"
                         }
                     }
                 }
@@ -94,13 +78,13 @@ const docTemplate = `{
                     "200": {
                         "description": "登录成功",
                         "schema": {
-                            "$ref": "#/definitions/model.LoginResp"
+                            "$ref": "#/definitions/common.LoginResp"
                         }
                     },
                     "400": {
                         "description": "请求参数错误",
                         "schema": {
-                            "$ref": "#/definitions/model.Base"
+                            "$ref": "#/definitions/common.Base"
                         }
                     }
                 }
@@ -129,7 +113,7 @@ const docTemplate = `{
                     "400": {
                         "description": "请求参数错误",
                         "schema": {
-                            "$ref": "#/definitions/model.Base"
+                            "$ref": "#/definitions/common.Base"
                         }
                     }
                 }
@@ -168,13 +152,13 @@ const docTemplate = `{
                     "200": {
                         "description": "注册成功",
                         "schema": {
-                            "$ref": "#/definitions/model.LoginResp"
+                            "$ref": "#/definitions/common.LoginResp"
                         }
                     },
                     "400": {
                         "description": "请求参数错误",
                         "schema": {
-                            "$ref": "#/definitions/model.Base"
+                            "$ref": "#/definitions/common.Base"
                         }
                     }
                 }
@@ -204,14 +188,14 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.UserResp"
+                                "$ref": "#/definitions/common.UserResp"
                             }
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.Base"
+                            "$ref": "#/definitions/common.Base"
                         }
                     }
                 }
@@ -248,13 +232,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.UserResp"
+                            "$ref": "#/definitions/common.UserResp"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.Base"
+                            "$ref": "#/definitions/common.Base"
                         }
                     }
                 }
@@ -262,7 +246,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "model.Base": {
+        "common.Base": {
             "type": "object",
             "properties": {
                 "code": {
@@ -274,7 +258,7 @@ const docTemplate = `{
                 }
             }
         },
-        "model.LoginResp": {
+        "common.LoginResp": {
             "type": "object",
             "properties": {
                 "accessToken": {
@@ -297,7 +281,7 @@ const docTemplate = `{
                 }
             }
         },
-        "model.UserResp": {
+        "common.UserResp": {
             "type": "object",
             "properties": {
                 "age": {

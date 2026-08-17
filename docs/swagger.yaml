@@ -1,6 +1,6 @@
 basePath: /
 definitions:
-  model.Base:
+  common.Base:
     properties:
       code:
         type: integer
@@ -8,7 +8,7 @@ definitions:
       message:
         type: string
     type: object
-  model.LoginResp:
+  common.LoginResp:
     properties:
       accessToken:
         type: string
@@ -23,7 +23,7 @@ definitions:
       username:
         type: string
     type: object
-  model.UserResp:
+  common.UserResp:
     properties:
       age:
         type: integer
@@ -42,32 +42,21 @@ info:
   version: "1.0"
 paths:
   /admin/login:
-    post:
+    get:
       consumes:
-      - application/x-www-form-urlencoded
-      description: 管理员登录
-      parameters:
-      - description: 用户名
-        in: formData
-        name: username
-        required: true
-        type: string
-      - description: 用户名
-        in: formData
-        name: password
-        required: true
-        type: string
-      produces:
       - application/json
+      description: 管理员登录
+      produces:
+      - text/plain
       responses:
         "200":
           description: 登录成功
           schema:
-            $ref: '#/definitions/model.LoginResp'
+            $ref: '#/definitions/common.LoginResp'
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/model.Base'
+            $ref: '#/definitions/common.Base'
       summary: 管理员登录
       tags:
       - 管理员
@@ -93,11 +82,11 @@ paths:
         "200":
           description: 登录成功
           schema:
-            $ref: '#/definitions/model.LoginResp'
+            $ref: '#/definitions/common.LoginResp'
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/model.Base'
+            $ref: '#/definitions/common.Base'
       summary: 登录
       tags:
       - 用户管理
@@ -116,7 +105,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/model.Base'
+            $ref: '#/definitions/common.Base'
       summary: 登出
       tags:
       - 用户管理
@@ -142,11 +131,11 @@ paths:
         "200":
           description: 注册成功
           schema:
-            $ref: '#/definitions/model.LoginResp'
+            $ref: '#/definitions/common.LoginResp'
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/model.Base'
+            $ref: '#/definitions/common.Base'
       summary: 创建用户
       tags:
       - 用户管理
@@ -162,12 +151,12 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/model.UserResp'
+              $ref: '#/definitions/common.UserResp'
             type: array
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.Base'
+            $ref: '#/definitions/common.Base'
       security:
       - ApiKeyAuth: []
       summary: 获取用户列表
@@ -190,11 +179,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.UserResp'
+            $ref: '#/definitions/common.UserResp'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/model.Base'
+            $ref: '#/definitions/common.Base'
       security:
       - ApiKeyAuth: []
       summary: 获取单个用户

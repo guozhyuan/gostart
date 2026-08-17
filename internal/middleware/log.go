@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"fmt"
-	"gostart/internal/service"
+	"gostart/internal/pkg"
 	"io"
 	"log/slog"
 	"net/http"
@@ -44,7 +44,7 @@ func ZapLoggerMiddleware() gin.HandlerFunc {
 
 		if status >= 500 {
 			msg = "服务器错误"
-			service.ZapLogger.Error(msg,
+			pkg.ZapLogger.Error(msg,
 				zap.String("proto", proto),
 				zap.String("method", method),
 				zap.Int("status", status),
@@ -54,7 +54,7 @@ func ZapLoggerMiddleware() gin.HandlerFunc {
 			)
 		} else if status >= 400 {
 			msg = "请求失败"
-			service.ZapLogger.Warn(msg,
+			pkg.ZapLogger.Warn(msg,
 				zap.String("proto", proto),
 				zap.String("method", method),
 				zap.Int("status", status),
@@ -64,7 +64,7 @@ func ZapLoggerMiddleware() gin.HandlerFunc {
 			)
 		} else {
 			msg = "请求成功"
-			service.ZapLogger.Info(msg,
+			pkg.ZapLogger.Info(msg,
 				zap.String("proto", proto),
 				zap.String("method", method),
 				zap.Int("status", status),

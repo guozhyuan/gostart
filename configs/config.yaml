@@ -30,10 +30,10 @@ zap:
 
 swagger:
   enabled: true
-  host: 172.31.98.14 # localhost # 172.31.98.14
+  host: localhost:9090 # localhost:9090 # 172.31.98.14
   scheme:
-    - https
-    # - http
+    # - https
+    - http
 # 跳过授权验证白名单
 authSkipPaths:
   - /api/login

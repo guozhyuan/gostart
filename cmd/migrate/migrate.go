@@ -2,7 +2,7 @@ package main
 
 import (
 	"gostart/internal/config"
-	"gostart/internal/service"
+	"gostart/internal/pkg"
 )
 
 // 常见的gorm标签
@@ -36,7 +36,7 @@ import (
 // gorm:"type:json"	JSON	通过 type 标签指定，MySQL 5.7+ 支持
 func main() {
 	config.ReadConfigByViper()
-	service.ConnectDB()
+	pkg.ConnectDB()
 	migrate()
 }
 

@@ -12,11 +12,14 @@ require (
 	github.com/swaggo/files v1.0.1
 	github.com/swaggo/gin-swagger v1.6.1
 	github.com/swaggo/swag v1.16.1
+	go.uber.org/ratelimit v0.3.1
 	go.uber.org/zap v1.21.0
 	golang.org/x/crypto v0.54.0
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	gorm.io/driver/mysql v1.6.0
+	gorm.io/gen v0.3.28
 	gorm.io/gorm v1.31.0
+	gorm.io/plugin/dbresolver v1.6.2
 )
 
 require (
@@ -40,9 +43,9 @@ require (
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.30.3 // indirect
-	github.com/go-redis/redis_rate/v10 v10.0.1 // indirect
 	github.com/go-sql-driver/mysql v1.10.0 // indirect
 	github.com/goccy/go-json v0.10.6 // indirect
+	github.com/google/uuid v1.3.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
@@ -70,9 +73,11 @@ require (
 	go.mongodb.org/mongo-driver/v2 v2.8.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
-	go.uber.org/ratelimit v0.3.1 // indirect
 	golang.org/x/arch v0.29.0 // indirect
+	golang.org/x/exp v0.0.0-20240112132812-db7319d0e0e3 // indirect
+	golang.org/x/mod v0.37.0 // indirect
 	golang.org/x/net v0.57.0 // indirect
+	golang.org/x/sync v0.22.0 // indirect
 	golang.org/x/sys v0.47.0 // indirect
 	golang.org/x/text v0.40.0 // indirect
 	golang.org/x/tools v0.47.0 // indirect
@@ -80,4 +85,6 @@ require (
 	gopkg.in/ini.v1 v1.66.4 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+	gorm.io/datatypes v1.2.4 // indirect
+	gorm.io/hints v1.1.0 // indirect
 )

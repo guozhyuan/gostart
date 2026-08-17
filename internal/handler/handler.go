@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"gostart/internal/model"
+	model "gostart/internal/dao/common"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

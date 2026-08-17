@@ -27,8 +27,7 @@ func newStreamerOnline(db *gorm.DB, opts ...gen.DOOption) streamerOnline {
 	_streamerOnline.Title = field.NewString(tableName, "title")
 	_streamerOnline.Img = field.NewString(tableName, "img")
 	_streamerOnline.Address = field.NewString(tableName, "address")
-	_streamerOnline.Platform = field.NewString(tableName, "platform")
-	_streamerOnline.PlatformID = field.NewString(tableName, "platform_id")
+	_streamerOnline.PlatformID = field.NewInt32(tableName, "platform_id")
 
 	_streamerOnline.fillFieldMap()
 
@@ -43,8 +42,7 @@ type streamerOnline struct {
 	Title      field.String
 	Img        field.String
 	Address    field.String
-	Platform   field.String
-	PlatformID field.String
+	PlatformID field.Int32
 
 	fieldMap map[string]field.Expr
 }
@@ -65,8 +63,7 @@ func (s *streamerOnline) updateTableName(table string) *streamerOnline {
 	s.Title = field.NewString(table, "title")
 	s.Img = field.NewString(table, "img")
 	s.Address = field.NewString(table, "address")
-	s.Platform = field.NewString(table, "platform")
-	s.PlatformID = field.NewString(table, "platform_id")
+	s.PlatformID = field.NewInt32(table, "platform_id")
 
 	s.fillFieldMap()
 
@@ -83,12 +80,11 @@ func (s *streamerOnline) GetFieldByName(fieldName string) (field.OrderExpr, bool
 }
 
 func (s *streamerOnline) fillFieldMap() {
-	s.fieldMap = make(map[string]field.Expr, 6)
+	s.fieldMap = make(map[string]field.Expr, 5)
 	s.fieldMap["id"] = s.ID
 	s.fieldMap["title"] = s.Title
 	s.fieldMap["img"] = s.Img
 	s.fieldMap["address"] = s.Address
-	s.fieldMap["platform"] = s.Platform
 	s.fieldMap["platform_id"] = s.PlatformID
 }
 

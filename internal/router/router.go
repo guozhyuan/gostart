@@ -26,6 +26,7 @@ func RouteConfig(engine *gin.Engine) {
 		api.POST("/regist", handler.Registe)
 		api.PUT("/user/:id", handler.UpdateUser)
 		api.DELETE("/user/:id", handler.DeleteUser)
+		api.POST("/streamer", handler.GetStreamers)
 	}
 
 	admin := engine.Group("/admin")

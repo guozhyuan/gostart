@@ -23,6 +23,21 @@ definitions:
       username:
         type: string
     type: object
+  common.StreamerResp:
+    properties:
+      address:
+        type: string
+      id:
+        type: integer
+      img:
+        type: string
+      platform:
+        $ref: '#/definitions/model.Platform'
+      platform_id:
+        type: integer
+      title:
+        type: string
+    type: object
   common.UserResp:
     properties:
       age:
@@ -32,6 +47,15 @@ definitions:
       id:
         type: integer
       username:
+        type: string
+    type: object
+  model.Platform:
+    properties:
+      code:
+        type: string
+      id:
+        type: integer
+      name:
         type: string
     type: object
 host: localhost:8080
@@ -112,7 +136,7 @@ paths:
   /api/regist:
     post:
       consumes:
-      - application/json
+      - application/x-www-form-urlencoded
       description: 创建用户
       parameters:
       - description: 用户名
@@ -139,6 +163,38 @@ paths:
       summary: 创建用户
       tags:
       - 用户管理
+  /api/streamer:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: 获取播主列表
+      parameters:
+      - description: 页码
+        in: formData
+        name: index
+        required: true
+        type: integer
+      - description: 数量
+        in: formData
+        name: size
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 登录成功
+          schema:
+            items:
+              $ref: '#/definitions/common.StreamerResp'
+            type: array
+        "400":
+          description: 请求参数错误
+          schema:
+            $ref: '#/definitions/common.Base'
+      summary: 获取播主列表
+      tags:
+      - 播主
   /api/user:
     get:
       consumes:

@@ -37,4 +37,5 @@ swagger:
 # 跳过授权验证白名单
 authSkipPaths:
   - /api/login
-  - /api/register
+  - /api/regist
+  - /api/streamer

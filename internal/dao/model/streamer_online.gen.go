@@ -8,12 +8,11 @@ const TableNameStreamerOnline = "streamer_online"
 
 // StreamerOnline mapped from table <streamer_online>
 type StreamerOnline struct {
-	ID         int32  `gorm:"column:id;primaryKey;autoIncrement:true" json:"id"`
+	ID         int32  `gorm:"column:id;primaryKey" json:"id"`
 	Title      string `gorm:"column:title" json:"title"`
 	Img        string `gorm:"column:img" json:"img"`
 	Address    string `gorm:"column:address" json:"address"`
-	Platform   string `gorm:"column:platform" json:"platform"`
-	PlatformID string `gorm:"column:platform_id" json:"platform_id"`
+	PlatformID int32  `gorm:"column:platform_id" json:"platform_id"`
 }
 
 // TableName StreamerOnline's table name

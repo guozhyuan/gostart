@@ -14,7 +14,7 @@ import (
 // @Summary      登录
 // @Description  登录
 // @Tags         用户管理
-// @Accept       x-www-form-urlencoded
+// @Accept       application/x-www-form-urlencoded
 // @Produce      json
 // @Param        username  formData string true "用户名"
 // @Param        password  formData string true "用户名"
@@ -54,7 +54,7 @@ func Logout(c *gin.Context) {
 // @Summary      创建用户
 // @Description  创建用户
 // @Tags         用户管理
-// @Accept       json
+// @Accept       application/x-www-form-urlencoded
 // @Produce      json
 // @Param        username  formData string true "用户名"
 // @Param        password  formData string true "用户密码"
@@ -172,4 +172,46 @@ func DeleteUser(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, response.OK(nil)) */
+}
+
+// @Summary      获取播主列表
+// @Description  获取播主列表
+// @Tags         播主
+// @Accept       application/x-www-form-urlencoded
+// @Produce      json
+// @Param        index  formData int true "页码"
+// @Param        size  formData int true "数量"
+// @Success      200   {object}   []common.StreamerResp  "登录成功"
+// @Failure      400   {object}  common.Base  "请求参数错误"
+// @Router       /api/streamer [post]
+func GetStreamers(c *gin.Context) {
+	offset := c.PostForm("index")
+	size := c.PostForm("size")
+	if offset == "" || size == "" {
+		Fail(c, http.StatusBadRequest, "offset and size can't be empty")
+		return
+	}
+	// retStr := strconv.Itoa(10)
+
+	o, oerr := strconv.Atoi(offset)
+	if oerr != nil {
+		Fail(c, http.StatusBadRequest, oerr.Error())
+		return
+	}
+	s, oerr := strconv.Atoi(size)
+	if oerr != nil {
+		Fail(c, http.StatusBadRequest, oerr.Error())
+	}
+
+	if o < 0 || s < 0 {
+		Fail(c, http.StatusBadRequest, "offset and size must be >= 0")
+		return
+	}
+
+	streamers, err := service.GetStreamers(o, s)
+	if err != nil {
+		Fail(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	OK(c, streamers)
 }

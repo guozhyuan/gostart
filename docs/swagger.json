@@ -116,7 +116,7 @@
             "post": {
                 "description": "创建用户",
                 "consumes": [
-                    "application/json"
+                    "application/x-www-form-urlencoded"
                 ],
                 "produces": [
                     "application/json"
@@ -146,6 +146,54 @@
                         "description": "注册成功",
                         "schema": {
                             "$ref": "#/definitions/common.LoginResp"
+                        }
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/common.Base"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/streamer": {
+            "post": {
+                "description": "获取播主列表",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "播主"
+                ],
+                "summary": "获取播主列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "index",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "数量",
+                        "name": "size",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "登录成功",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/common.StreamerResp"
+                            }
                         }
                     },
                     "400": {
@@ -274,6 +322,29 @@
                 }
             }
         },
+        "common.StreamerResp": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "img": {
+                    "type": "string"
+                },
+                "platform": {
+                    "$ref": "#/definitions/model.Platform"
+                },
+                "platform_id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "common.UserResp": {
             "type": "object",
             "properties": {
@@ -287,6 +358,20 @@
                     "type": "integer"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Platform": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
                     "type": "string"
                 }
             }

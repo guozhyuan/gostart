@@ -1,5 +1,7 @@
 package common
 
+import "gostart/internal/dao/model"
+
 type LoginResp struct {
 	ID           int64  `gorm:"primarykey" json:"id"`
 	Username     string `gorm:"size:64;uniqueIndex" json:"username"`
@@ -13,4 +15,13 @@ type UserResp struct {
 	Username string `json:"username"`
 	Email    string `json:"email"`
 	Age      int32  `json:"age"`
+}
+
+type StreamerResp struct {
+	ID         int32           `json:"id"`
+	Title      string          `json:"title"`
+	Img        string          `json:"img"`
+	Address    string          `json:"address"`
+	PlatformID int32           `json:"platform_id"`
+	Platform   *model.Platform `json:"platform"`
 }

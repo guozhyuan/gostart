@@ -26,6 +26,7 @@ web             前端资源
 ```
 go get  gorm.io/gorm@v1.30.0 
 go get  gorm.io/driver/mysql@v1.6.0 
+go get gorm.io/gen@v0.3.28    // 生成模型和CRUD
 ```
 ### 路由   gin 
 ```
@@ -73,6 +74,26 @@ go get github.com/swaggo/files
 
 
 ```
-   
+
+### 定时任务
+```
+go get github.com/robfig/cron/v3@v3.0.0
+```
 
 
+
+#  优秀go库
+```
+https://github.com/avelino/awesome-go
+```
+# Web脚手架
+```
+https://github.com/piupuer/gin-web
+```
+
+# 微服务框架
+```
+Kratos
+go-zero
+go-micro
+```

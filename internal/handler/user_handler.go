@@ -2,7 +2,8 @@ package handler
 
 import (
 	"fmt"
-	"gostart/internal/model"
+	"gostart/internal/dao/common"
+	"gostart/internal/dao/model"
 	"gostart/internal/service"
 	"net/http"
 	"strconv"
@@ -13,28 +14,27 @@ import (
 // @Summary      登录
 // @Description  登录
 // @Tags         用户管理
-// @Accept       x-www-form-urlencoded
+// @Accept       application/x-www-form-urlencoded
 // @Produce      json
 // @Param        username  formData string true "用户名"
 // @Param        password  formData string true "用户名"
-// @Success      200   {object}   model.LoginResp  "登录成功"
-// @Failure      400   {object}  model.Base  "请求参数错误"
+// @Success      200   {object}   common.LoginResp  "登录成功"
+// @Failure      400   {object}  common.Base  "请求参数错误"
 // @Router       /api/login [post]
 func Login(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
-	userDO, tokenDO, err := service.Login(username, password)
+	userDO, token, err := service.Login(username, password)
 	if err != nil {
 		Fail(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	loginResp := &model.LoginResp{
-		ID:           userDO.ID,
-		Username:     userDO.Username,
-		Email:        userDO.Email,
-		Age:          userDO.Age,
-		AccessToken:  tokenDO.AccessToken,
-		RefreshToken: tokenDO.RefreshToken,
+	loginResp := &common.LoginResp{
+		ID:          userDO.ID,
+		Username:    userDO.Username,
+		Email:       userDO.Email,
+		Age:         userDO.Age,
+		AccessToken: token,
 	}
 	OK(c, loginResp)
 }
@@ -45,7 +45,7 @@ func Login(c *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Success      200   {string}   string  "登出成功"
-// @Failure      400   {object}  model.Base  "请求参数错误"
+// @Failure      400   {object}  common.Base  "请求参数错误"
 // @Router       /api/logout [post]
 func Logout(c *gin.Context) {
 
@@ -54,34 +54,33 @@ func Logout(c *gin.Context) {
 // @Summary      创建用户
 // @Description  创建用户
 // @Tags         用户管理
-// @Accept       json
+// @Accept       application/x-www-form-urlencoded
 // @Produce      json
 // @Param        username  formData string true "用户名"
 // @Param        password  formData string true "用户密码"
-// @Success      200   {object}   model.LoginResp  "注册成功"
-// @Failure      400   {object}  model.Base  "请求参数错误"
+// @Success      200   {object}   common.LoginResp  "注册成功"
+// @Failure      400   {object}  common.Base  "请求参数错误"
 // @Router       /api/regist [post]
 func Registe(c *gin.Context) {
-	var userParam model.UserDO
+	var userParam model.User
 	// if err := c.ShouldBindJSON(&userParam); err != nil {
 	// 	Fail(c, http.StatusBadRequest, err.Error())
 	// 	return
 	// }
 	userParam.Username = c.PostForm("username")
 	userParam.Password = c.PostForm("password")
-	ret, tokenDO, err := service.CreateUser(&userParam)
+	ret, token, err := service.CreateUser(&userParam)
 	if err != nil {
 		Fail(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	loginResp := &model.LoginResp{
-		ID:           ret.ID,
-		Username:     ret.Username,
-		Email:        ret.Email,
-		Age:          ret.Age,
-		AccessToken:  tokenDO.AccessToken,
-		RefreshToken: tokenDO.RefreshToken,
+	loginResp := &common.LoginResp{
+		ID:          ret.ID,
+		Username:    ret.Username,
+		Email:       ret.Email,
+		Age:         ret.Age,
+		AccessToken: token,
 	}
 	OK(c, loginResp)
 }
@@ -92,18 +91,18 @@ func Registe(c *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Security ApiKeyAuth
-// @Success      200   {object}   []model.UserResp
-// @Failure      400   {object}  model.Base
+// @Success      200   {object}   []common.UserResp
+// @Failure      400   {object}  common.Base
 // @Router       /api/user [get]
 func GetUsers(c *gin.Context) {
 	ret, err := service.GetAllUsers()
-	var userResps = []*model.UserResp{}
-	for _, v := range ret {
-		userResps = append(userResps, &model.UserResp{
-			ID:       v.ID,
-			Username: v.Username,
-			Email:    v.Email,
-			Age:      v.Age,
+	var userResps = []*common.UserResp{}
+	for _, value := range ret {
+		userResps = append(userResps, &common.UserResp{
+			ID:       value.ID,
+			Username: value.Username,
+			Email:    value.Email,
+			Age:      value.Age,
 		})
 	}
 	if err != nil {
@@ -120,8 +119,8 @@ func GetUsers(c *gin.Context) {
 // @Produce      json
 // @Param        id path int  true "用户id"
 // @Security     ApiKeyAuth
-// @Success      200   {object}  model.UserResp
-// @Failure      400   {object}  model.Base
+// @Success      200   {object}  common.UserResp
+// @Failure      400   {object}  common.Base
 // @Router       /api/user/{id} [get]
 func GetUser(c *gin.Context) {
 	intId, err := strconv.Atoi(c.Param("id"))
@@ -136,7 +135,7 @@ func GetUser(c *gin.Context) {
 		Fail(c, http.StatusBadRequest, err.Error())
 		return
 	}
-	userResp := model.UserResp{
+	userResp := common.UserResp{
 		ID:       ret.ID,
 		Username: ret.Username,
 		Email:    ret.Email,
@@ -173,4 +172,46 @@ func DeleteUser(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, response.OK(nil)) */
+}
+
+// @Summary      获取播主列表
+// @Description  获取播主列表
+// @Tags         播主
+// @Accept       application/x-www-form-urlencoded
+// @Produce      json
+// @Param        index  formData int true "页码"
+// @Param        size  formData int true "数量"
+// @Success      200   {object}   []common.StreamerResp  "登录成功"
+// @Failure      400   {object}  common.Base  "请求参数错误"
+// @Router       /api/streamer [post]
+func GetStreamers(c *gin.Context) {
+	offset := c.PostForm("index")
+	size := c.PostForm("size")
+	if offset == "" || size == "" {
+		Fail(c, http.StatusBadRequest, "offset and size can't be empty")
+		return
+	}
+	// retStr := strconv.Itoa(10)
+
+	o, oerr := strconv.Atoi(offset)
+	if oerr != nil {
+		Fail(c, http.StatusBadRequest, oerr.Error())
+		return
+	}
+	s, oerr := strconv.Atoi(size)
+	if oerr != nil {
+		Fail(c, http.StatusBadRequest, oerr.Error())
+	}
+
+	if o < 0 || s < 0 {
+		Fail(c, http.StatusBadRequest, "offset and size must be >= 0")
+		return
+	}
+
+	streamers, err := service.GetStreamers(o, s)
+	if err != nil {
+		Fail(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	OK(c, streamers)
 }

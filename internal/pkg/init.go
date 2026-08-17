@@ -1,9 +1,9 @@
-package service
+package pkg
 
 import (
-	"context"
 	"fmt"
 	"gostart/internal/config"
+	"gostart/internal/dao/query"
 	"log"
 	"os"
 	"time"
@@ -22,7 +22,8 @@ func ReadConfig() {
 
 var DB *gorm.DB
 var RedisDB *redis.Client
-var Ctx context.Context = context.Background()
+var ZapLogger *zap.Logger
+var ZapSugar *zap.SugaredLogger
 
 func ConnectDB() {
 	// username:password@protocol(address)/dbname?param=value
@@ -36,6 +37,9 @@ func ConnectDB() {
 	)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	DB = db
+	// 使用gen的CRUD
+	query.SetDefault(db)
+
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -43,6 +47,7 @@ func ConnectDB() {
 	sqlDB.SetMaxIdleConns(config.Configs.Mysql.MaxIdleConns)
 	sqlDB.SetMaxOpenConns(config.Configs.Mysql.MaxOpenConns)
 	sqlDB.SetConnMaxLifetime(time.Duration(config.Configs.Mysql.ConnMaxLifetime) * time.Second)
+
 }
 
 func ConnectRedis() {
@@ -53,9 +58,6 @@ func ConnectRedis() {
 	})
 	RedisDB = rdb
 }
-
-var ZapLogger *zap.Logger
-var ZapSugar *zap.SugaredLogger
 
 func ZapLogInit() {
 	var core zapcore.Core

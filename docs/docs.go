@@ -17,45 +17,29 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/admin/login": {
-            "post": {
+            "get": {
                 "description": "管理员登录",
                 "consumes": [
-                    "application/x-www-form-urlencoded"
+                    "application/json"
                 ],
                 "produces": [
-                    "application/json"
+                    "text/plain"
                 ],
                 "tags": [
                     "管理员"
                 ],
                 "summary": "管理员登录",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "用户名",
-                        "name": "username",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "用户名",
-                        "name": "password",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "登录成功",
                         "schema": {
-                            "$ref": "#/definitions/model.LoginResp"
+                            "$ref": "#/definitions/common.LoginResp"
                         }
                     },
                     "400": {
                         "description": "请求参数错误",
                         "schema": {
-                            "$ref": "#/definitions/model.Base"
+                            "$ref": "#/definitions/common.Base"
                         }
                     }
                 }
@@ -94,13 +78,13 @@ const docTemplate = `{
                     "200": {
                         "description": "登录成功",
                         "schema": {
-                            "$ref": "#/definitions/model.LoginResp"
+                            "$ref": "#/definitions/common.LoginResp"
                         }
                     },
                     "400": {
                         "description": "请求参数错误",
                         "schema": {
-                            "$ref": "#/definitions/model.Base"
+                            "$ref": "#/definitions/common.Base"
                         }
                     }
                 }
@@ -129,7 +113,7 @@ const docTemplate = `{
                     "400": {
                         "description": "请求参数错误",
                         "schema": {
-                            "$ref": "#/definitions/model.Base"
+                            "$ref": "#/definitions/common.Base"
                         }
                     }
                 }
@@ -139,7 +123,7 @@ const docTemplate = `{
             "post": {
                 "description": "创建用户",
                 "consumes": [
-                    "application/json"
+                    "application/x-www-form-urlencoded"
                 ],
                 "produces": [
                     "application/json"
@@ -168,13 +152,61 @@ const docTemplate = `{
                     "200": {
                         "description": "注册成功",
                         "schema": {
-                            "$ref": "#/definitions/model.LoginResp"
+                            "$ref": "#/definitions/common.LoginResp"
                         }
                     },
                     "400": {
                         "description": "请求参数错误",
                         "schema": {
-                            "$ref": "#/definitions/model.Base"
+                            "$ref": "#/definitions/common.Base"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/streamer": {
+            "post": {
+                "description": "获取播主列表",
+                "consumes": [
+                    "application/x-www-form-urlencoded"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "播主"
+                ],
+                "summary": "获取播主列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "index",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "数量",
+                        "name": "size",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "登录成功",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/common.StreamerResp"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "请求参数错误",
+                        "schema": {
+                            "$ref": "#/definitions/common.Base"
                         }
                     }
                 }
@@ -204,14 +236,14 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.UserResp"
+                                "$ref": "#/definitions/common.UserResp"
                             }
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.Base"
+                            "$ref": "#/definitions/common.Base"
                         }
                     }
                 }
@@ -248,13 +280,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.UserResp"
+                            "$ref": "#/definitions/common.UserResp"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/model.Base"
+                            "$ref": "#/definitions/common.Base"
                         }
                     }
                 }
@@ -262,7 +294,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "model.Base": {
+        "common.Base": {
             "type": "object",
             "properties": {
                 "code": {
@@ -274,7 +306,7 @@ const docTemplate = `{
                 }
             }
         },
-        "model.LoginResp": {
+        "common.LoginResp": {
             "type": "object",
             "properties": {
                 "accessToken": {
@@ -297,7 +329,30 @@ const docTemplate = `{
                 }
             }
         },
-        "model.UserResp": {
+        "common.StreamerResp": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "img": {
+                    "type": "string"
+                },
+                "platform": {
+                    "$ref": "#/definitions/model.Platform"
+                },
+                "platform_id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "common.UserResp": {
             "type": "object",
             "properties": {
                 "age": {
@@ -310,6 +365,20 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Platform": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
                     "type": "string"
                 }
             }

@@ -1,10 +1,14 @@
 package router
 
 import (
+	"gostart/docs"
+	"gostart/internal/config"
 	"gostart/internal/handler"
 	"gostart/internal/middleware"
 
 	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func RouteConfig(engine *gin.Engine) {
@@ -22,12 +26,20 @@ func RouteConfig(engine *gin.Engine) {
 		api.POST("/regist", handler.Registe)
 		api.PUT("/user/:id", handler.UpdateUser)
 		api.DELETE("/user/:id", handler.DeleteUser)
+		api.POST("/streamer", handler.GetStreamers)
 	}
 
 	admin := engine.Group("/admin")
 	admin.Use(middleware.ZapLoggerMiddleware())
 	admin.Use(middleware.RateLimitMiddleware(5))
 	{
-		admin.POST("/login", handler.AdminLogin)
+		admin.GET("/login", handler.AdminLogin)
+	}
+
+	// Swagger 启用
+	if config.Configs.Swagger.Enabled {
+		docs.SwaggerInfo.Host = config.Configs.Swagger.Host
+		docs.SwaggerInfo.Schemes = config.Configs.Swagger.Scheme
+		engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	}
 }

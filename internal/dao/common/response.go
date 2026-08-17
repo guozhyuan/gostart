@@ -1,4 +1,4 @@
-package model
+package common
 
 type Base struct {
 	Code    int    `json:"code"`

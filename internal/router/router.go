@@ -19,21 +19,22 @@ func RouteConfig(engine *gin.Engine) {
 	api.Use(middleware.AuthMiddleware())
 	api.Use(middleware.ZapLoggerMiddleware())
 	{
-		api.POST("/login", handler.Login)
-		api.POST("/logout", handler.Logout)
-		api.GET("/user", handler.GetUsers)
-		api.GET("/user/:id", handler.GetUser)
-		api.POST("/regist", handler.Registe)
-		api.PUT("/user/:id", handler.UpdateUser)
-		api.DELETE("/user/:id", handler.DeleteUser)
-		api.POST("/streamer", handler.GetStreamers)
+		api.POST("/test", handler.UserHandler.Test)
+		api.POST("/login", handler.UserHandler.Login)
+		api.POST("/logout", handler.UserHandler.Logout)
+		api.GET("/user", handler.UserHandler.GetUsers)
+		api.GET("/user/:id", handler.UserHandler.GetUser)
+		api.POST("/regist", handler.UserHandler.Registe)
+		api.PUT("/user/:id", handler.UserHandler.UpdateUser)
+		api.DELETE("/user/:id", handler.UserHandler.DeleteUser)
+		api.POST("/streamer", handler.UserHandler.GetStreamers)
 	}
 
 	admin := engine.Group("/admin")
 	admin.Use(middleware.ZapLoggerMiddleware())
 	admin.Use(middleware.RateLimitMiddleware(5))
 	{
-		admin.GET("/login", handler.AdminLogin)
+		admin.GET("/login", handler.AdminHandler.AdminLogin)
 	}
 
 	// Swagger 启用

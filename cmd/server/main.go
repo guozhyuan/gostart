@@ -4,6 +4,7 @@ import (
 	"gostart/internal/config"
 	"gostart/internal/pkg"
 	"gostart/internal/router"
+	"log"
 	"net/http"
 	"time"
 
@@ -21,6 +22,11 @@ import (
 // @name Authorization
 func main() {
 	pkg.ReadConfig()
+	// JWT 密钥必须在启动期就校验：缺失时立即拒绝启动，而不是等到首次登录才暴露。
+	// 若此处放行，token 签发/校验将退化为不可用或使用不安全密钥。
+	if config.Configs.JWT == nil || config.Configs.JWT.SecretKey == "" {
+		log.Fatal("jwt.secretKey 未配置：请在 configs/config.yaml 或环境变量中设置强密钥")
+	}
 	pkg.ZapLogInit()
 	pkg.ConnectDB()
 	pkg.ConnectRedis()

@@ -16,7 +16,7 @@ mysql:
   maxOpenConns: 25
   connMaxLifetime: 300   #seconds
 jwt:
-  secret: "your_jwt_secret"
+  secretKey: "your_jwt_secret"
   expire: 7200
 
 redis:

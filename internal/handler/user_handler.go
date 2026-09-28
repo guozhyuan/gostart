@@ -11,6 +11,34 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var UserHandler UserHandlerInterface = &UserHandlerImpl{}
+
+type UserHandlerInterface interface {
+	Test(c *gin.Context)
+	Login(c *gin.Context)
+	Logout(c *gin.Context)
+	Registe(c *gin.Context)
+	GetUsers(c *gin.Context)
+	GetUser(c *gin.Context)
+	UpdateUser(c *gin.Context)
+	DeleteUser(c *gin.Context)
+	GetStreamers(c *gin.Context)
+}
+
+type UserHandlerImpl struct {
+}
+
+// @Summary      测试
+// @Description  测试
+// @Tags         测试
+// @Accept       json
+// @Produce      json
+// @Success      200   {object}   common.Base  "测试成功"
+// @Failure      400   {object}  common.Base  "请求参数错误"
+func (*UserHandlerImpl) Test(c *gin.Context) {
+
+}
+
 // @Summary      登录
 // @Description  登录
 // @Tags         用户管理
@@ -21,7 +49,7 @@ import (
 // @Success      200   {object}   common.LoginResp  "登录成功"
 // @Failure      400   {object}  common.Base  "请求参数错误"
 // @Router       /api/login [post]
-func Login(c *gin.Context) {
+func (*UserHandlerImpl) Login(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 	userDO, token, err := service.Login(username, password)
@@ -47,7 +75,7 @@ func Login(c *gin.Context) {
 // @Success      200   {string}   string  "登出成功"
 // @Failure      400   {object}  common.Base  "请求参数错误"
 // @Router       /api/logout [post]
-func Logout(c *gin.Context) {
+func (*UserHandlerImpl) Logout(c *gin.Context) {
 
 }
 
@@ -61,7 +89,7 @@ func Logout(c *gin.Context) {
 // @Success      200   {object}   common.LoginResp  "注册成功"
 // @Failure      400   {object}  common.Base  "请求参数错误"
 // @Router       /api/regist [post]
-func Registe(c *gin.Context) {
+func (*UserHandlerImpl) Registe(c *gin.Context) {
 	var userParam model.User
 	// if err := c.ShouldBindJSON(&userParam); err != nil {
 	// 	Fail(c, http.StatusBadRequest, err.Error())
@@ -94,7 +122,7 @@ func Registe(c *gin.Context) {
 // @Success      200   {object}   []common.UserResp
 // @Failure      400   {object}  common.Base
 // @Router       /api/user [get]
-func GetUsers(c *gin.Context) {
+func (*UserHandlerImpl) GetUsers(c *gin.Context) {
 	ret, err := service.GetAllUsers()
 	var userResps = []*common.UserResp{}
 	for _, value := range ret {
@@ -122,7 +150,7 @@ func GetUsers(c *gin.Context) {
 // @Success      200   {object}  common.UserResp
 // @Failure      400   {object}  common.Base
 // @Router       /api/user/{id} [get]
-func GetUser(c *gin.Context) {
+func (*UserHandlerImpl) GetUser(c *gin.Context) {
 	intId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		Fail(c, http.StatusBadRequest, err.Error())
@@ -145,7 +173,7 @@ func GetUser(c *gin.Context) {
 }
 
 // 更新用户
-func UpdateUser(c *gin.Context) {
+func (*UserHandlerImpl) UpdateUser(c *gin.Context) {
 	/* id := c.Param("id")
 	var user model.UserDO
 	if err := config.DB.First(&user, id).Error; err != nil {
@@ -165,7 +193,7 @@ func UpdateUser(c *gin.Context) {
 }
 
 // 删除用户
-func DeleteUser(c *gin.Context) {
+func (*UserHandlerImpl) DeleteUser(c *gin.Context) {
 	/* id := c.Param("id")
 	if err := config.DB.Delete(&model.UserDO{}, id).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, response.Error(err.Error()))
@@ -184,7 +212,7 @@ func DeleteUser(c *gin.Context) {
 // @Success      200   {object}   []common.StreamerResp  "登录成功"
 // @Failure      400   {object}  common.Base  "请求参数错误"
 // @Router       /api/streamer [post]
-func GetStreamers(c *gin.Context) {
+func (*UserHandlerImpl) GetStreamers(c *gin.Context) {
 	offset := c.PostForm("index")
 	size := c.PostForm("size")
 	if offset == "" || size == "" {
